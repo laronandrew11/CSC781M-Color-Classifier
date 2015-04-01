@@ -1,3 +1,6 @@
 I=imread('sample.png');
-I2=RGB2Lab(I);
-mesh(I2);
+[L,a,b]=RGB2Lab(I);
+plot3(L,a,b,'r.');
+xlabel('L');
+ylabel('a');
+zlabel('b');
