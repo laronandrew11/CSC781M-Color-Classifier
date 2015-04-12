@@ -17,3 +17,6 @@ https://www.gnu.org/software/octave/doc/interpreter/Manipulation-of-Plot-Windows
 
 How do I use the built-in function bsxfun(...)?
 https://www.gnu.org/software/octave/doc/interpreter/Broadcasting.html
+
+How do I use the built-in function cov(...)?
+http://octave.sourceforge.net/nan/function/cov.html
