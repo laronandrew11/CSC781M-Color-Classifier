@@ -1,6 +1,6 @@
 close all;
 
-I = imread('sample.png');
+I = imread('sample1.png');
 LAB = RGB2Lab(I);
 
 
@@ -54,13 +54,39 @@ mean(mean(PCA(:,:,2)))
 mean(mean(PCA(:,:,3)))
 
 
-pc1 = PCA(:,:,1);
-pc2 = PCA(:,:,2);
-pc3 = PCA(:,:,3);
-plot3(pc1, pc2, pc3, 'r.');
+%%trying to plot PCA vectors on LAB space
+
+
+
+
+plot3(LAB(:,:,1), LAB(:,:,2), LAB(:,:,3), 'r.');
 xlabel('L');
 ylabel('a');
 zlabel('b');
+scale=75;
+
+line1 = line([m(1) - scale * V(1,1) m(1) + scale * V(1,1)], [m(2) - scale * V(2,1) m(2) + scale * V(2,1)],[m(3) - scale * V(3,1) m(3) + scale * V(3,1)]);
+line2 = line([m(1) - scale * V(1,2) m(1) + scale * V(1,2)], [m(2) - scale * V(2,2) m(2) + scale * V(2,2)],[m(3) - scale * V(3,2) m(3) + scale * V(3,2)]);
+line3 = line([m(1) - scale * V(1,3) m(1) + scale * V(1,3)], [m(2) - scale * V(2,3) m(2) + scale * V(2,3)],[m(3) - scale * V(3,3) m(3) + scale * V(3,3)]);
+
+
+set(line1, 'color', [0 0 1], "linestyle", "--")
+set(line2, 'color', [0 1 0], "linestyle", "--")
+set(line3, 'color', [0 1 1], "linestyle", "--")
+
+axis tight;
+
+
+pc1 = PCA(:,:,1);
+pc2 = PCA(:,:,2);
+pc3 = PCA(:,:,3);
+
+
+figure;
+plot3(pc1, pc2, pc3, 'r.');
+xlabel('PC1');
+ylabel('PC2');
+zlabel('PC3');
 
 
 % E = E / 14400;
