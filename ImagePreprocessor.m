@@ -65,7 +65,10 @@ good_mountains=mountain_selector(c1n, c1x, extremes1, number_of_bins);
 %respect to these subregions.
 
 if (rows(good_mountains)>1)
- % bestmountain;
+ bestmountain=max(good_mountains(:,1));
+ bestindex = find(good_mountains(:,1)==bestmountain,1);
+ thresholdmin=good_mountains(bestindex,2);
+ thresholdmax=good_mountains(bestindex,3);
 
 endif
 
