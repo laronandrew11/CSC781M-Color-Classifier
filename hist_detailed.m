@@ -28,7 +28,7 @@ function [NN, XX, extremes] = hist_detailed(X, n, hist_title) %   Area of a hist
       peakgraph1 = bar(XX, peaks1);
       set (peakgraph1, 'facecolor', 'g');
        valleygraph1 = bar(XX, valleys1);
-      set (peakgraph1, 'facecolor', 'r');
+      set (valleygraph1, 'facecolor', 'r');
 	else
 		error("hist_detailed function requires at least 2 parameters. See help hist_detailed for more details.");
 	endif
