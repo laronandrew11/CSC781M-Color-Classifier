@@ -88,14 +88,16 @@ if plotCIELab == 1
   axis tight;
 end
 
+ pc1 = PCA(:,:,1);
+  pc2 = PCA(:,:,2);
+  pc3 = PCA(:,:,3);
+
 % (9) On a different figure, plot transformed image c'
 plotTransformedC = 0;
 if plotTransformedC == 1
   figure;
 
-  pc1 = PCA(:,:,1);
-  pc2 = PCA(:,:,2);
-  pc3 = PCA(:,:,3);
+ 
 
   plot3(pc1, pc2, pc3, 'r.');
   title("Color vectors after transformation");
@@ -126,20 +128,25 @@ imgm = ones(120,120);
 
 number_of_bins = 128;
 
+
 figure;
-[c1n, c1x] = hist(PCA(:,:,1), number_of_bins);
+[c1n, c1x] = hist(pc1(:), number_of_bins);
 bar(c1x, c1n);
 title("Histogram of c1'");
 
 figure;
-[c2n, c2x] = hist(PCA(:,:,2), number_of_bins);
+[c2n, c2x] = hist(pc2(:), number_of_bins);
 bar(c2x, c2n);
 title("Histogram of c2'");
 
 figure;
-[c3n, c3x] = hist(PCA(:,:,3), number_of_bins);
+[c3n, c3x] = hist(pc3(:), number_of_bins);
 bar(c3x, c3n);
 title("Histogram of c3'");
+
+
+
+%Extremes=extr(hist1);
 
 
 % (12) "A set of significant mountains are determined by taking account
