@@ -86,5 +86,9 @@ endif
 %then the finishing process is executed.
 
 if (rows(good_mountains)==1)
-  %TODO loop to PC2 
+  good_mountains2=mountain_selector(c2n, c2x, extremes2, number_of_bins);
+   good_mountains3=mountain_selector(c3n, c3x, extremes3, number_of_bins);
+  if (rows(good_mountains2)==1 &(rows(good_mountains3)==1))
+  %%TODO extract color data
+  endif
 endif
