@@ -49,6 +49,13 @@ number_of_bins = 128;
 
 At = hist_size(c1n);
 
+leftValleyIdx = 2;
+rightValleyIdx = 5;
+
+Ap = hist_size(c1n, leftValleyIdx, rightValleyIdx);
+fwhmValue = fwhm(c1x(leftValleyIdx:rightValleyIdx), c1n(leftValleyIdx:rightValleyIdx));
+f = ( Ap / At ) * (100 / fwhmValue);
+
 
 % (12) "A set of significant mountains are determined by taking account
 %       of the heights of peaks and valley bottoms, and then a criterion
