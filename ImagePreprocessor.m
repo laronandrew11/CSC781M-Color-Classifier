@@ -19,14 +19,14 @@ LAB = RGB2Lab(I);
 
 % (6) Plot the image in the CIELab colorspace and (7) plot the 1st, 2nd, and 3rd principal components 
 scale = 75;
-plotLab(LAB, m, V, scale);
+% plotLab(LAB, m, V, scale);
 
 % (8) Transform the original color vectors in CIELab into the new color vectors of PCA
 PCA = LABtoPCA(LAB, m, V);
 
 
 % (9) On a different figure, plot transformed image c', in the PCA coordinate system
-plotPCA(PCA);
+% plotPCA(PCA);
 
 
 
@@ -47,21 +47,21 @@ imgm = ones(120,120);
 number_of_bins = 128;
 
 figure;
-[c1n, c1x] = hist(pc1(:), number_of_bins);
+[c1n, c1x] = hist(PCA(:,:,1)(:), number_of_bins);
 bar(c1x, c1n);
 title("Histogram of c1'");
 
 figure;
-[c2n, c2x] = hist(pc2(:), number_of_bins);
+[c2n, c2x] = hist(PCA(:,:,2)(:), number_of_bins);
 bar(c2x, c2n);
 title("Histogram of c2'");
 
 figure;
-[c3n, c3x] = hist(pc3(:), number_of_bins);
+[c3n, c3x] = hist(PCA(:,:,3)(:), number_of_bins);
 bar(c3x, c3n);
 title("Histogram of c3'");
 
-%Extremes=extr(hist1);
+% Extremes=extr(hist1);
 
 
 % (12) "A set of significant mountains are determined by taking account
