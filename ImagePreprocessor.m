@@ -169,6 +169,7 @@ set (peakgraph3, 'facecolor', 'g');
 
 
 
+At = count=sum(n(x>0 & x < 1));
 
 
 
