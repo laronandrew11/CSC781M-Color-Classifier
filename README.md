@@ -13,3 +13,6 @@ Specifically, RGB to CIELAB and vice versa. Code distributed by Mark Ruzon (2009
 
 * [Octave implementation](http://www.bytefish.de/blog/pca_lda_with_gnu_octave/)
 * [Wikipedia reference](http://en.wikipedia.org/wiki/Principal_component_analysis)
+
+## Extremes
+* [Quick search for local extremes](http://www.mathworks.com/matlabcentral/fileexchange/10272-quick-search-for-local-extremes)
