@@ -48,63 +48,7 @@ number_of_bins = 128;
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
 
-% Compute total histogram size of c1n
-At = hist_size(c1n);
-
-% Container for the mountains and its criteria value
-% format is [idx leftvalleyidx rightvalleyidx]
-good_mountains = [ ];
-
-% initializations
-leftValleyIdx = 1;
-rightValleyIdx = number_of_bins;
-
-% the minimas and maximas acquired from the histogram
-maximas = extremes1(1:128);
-minimas = extremes1(129:256);
-
-% find the first valley
-for i = 1:number_of_bins
-  % skip all non-valleys (mountains)
-  if (minimas(i) == 0)
-  	continue;
-  endif	
-
-  % found left valley
-  leftValleyIdx = i;
-
-  % beginning there, find the next valley
-  for j = (leftValleyIdx+1):number_of_bins
-    % skip all non-valleys (mountains)
-  	if(minimas(j) == 0)
-      continue;
-    endif
-  endfor
-
-  % found right valley
-  rightValleyIdx = j;
-
-
-  % Compute area of histogram between these valleys
-  Ap = hist_size(c1n, leftValleyIdx, rightValleyIdx);
-
-  % Compute fwhm of this mountain
-  fwhmValue = fwhm(c1x(leftValleyIdx:rightValleyIdx), c1n(leftValleyIdx:rightValleyIdx));
-
-  % Avoid division by zero
-  if (fwhmValue > 0)
-    f = ( Ap / At ) * (100 / fwhmValue);
-
-    % insert into list
-    good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];
-  endif
-
-  % continue to the next mountain beginning at the right valley as the left valley
-  i = j;
-endfor
-
-
-
+good_mountains=mountain_selector(c1n, c1x, extremes1, number_of_bins);
 
 
 % (12) "A set of significant mountains are determined by taking account
@@ -121,7 +65,7 @@ endfor
 %respect to these subregions.
 
 if (rows(good_mountains)>1)
-  bestmountain;
+ % bestmountain;
 
 endif
 
@@ -142,4 +86,5 @@ endif
 %then the finishing process is executed.
 
 if (rows(good_mountains)==1)
+  %TODO loop to PC2 
 endif
