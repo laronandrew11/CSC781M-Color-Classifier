@@ -21,10 +21,11 @@ function [NN, XX, extremes] = hist_detailed(X, n, hist_title) %   Area of a hist
       hold on;
       extremes = extr(NN);
       pos1 = reshape(cell2mat(extremes(1)),[1,128]);
-      valleys1 = reshape(cell2mat(extremes(2)), [1,128]);
-      extremes = [pos1 valleys1];
+      pos2 = reshape(cell2mat(extremes(2)), [1,128])
+      extremes = [pos1 pos2];
       
       peaks1 = NN .*(+pos1);
+       valleys1 = NN .*(+pos2);
       peakgraph1 = bar(XX, peaks1);
       set (peakgraph1, 'facecolor', 'g');
        valleygraph1 = bar(XX, valleys1);
