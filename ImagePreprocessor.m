@@ -70,6 +70,11 @@ if (rows(good_mountains)>1)
  bestindex = find(good_mountains(:,1)==bestmountain,1);
  thresholdmin=good_mountains(bestindex,2);
  thresholdmax=good_mountains(bestindex,3);
+ %%assuming that program will then consider all regions outside the most significant mountain
+ %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
+ region = (PCA(:,:,1)<thresholdmin)|(PCA(:,:,1)>thresholdmax);
+ imgm=imgm.*(+region);
+ %%to do: loop back to PCA on unmasked region of image
 endif
 
 
