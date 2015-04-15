@@ -145,6 +145,7 @@ bar(c3x, c3n);
 title("Histogram of c3'");
 
 
+At = count=sum(n(x>0 & x < 1));
 
 %Extremes=extr(hist1);
 
