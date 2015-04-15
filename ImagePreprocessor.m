@@ -44,43 +44,9 @@ imgm = ones(120,120);
 
 number_of_bins = 128;
 
-figure;
-[c1n, c1x] = hist(PCA(:,:,1)(:), number_of_bins);
-bar(c1x, c1n);
-title("Histogram of c1'");
-
-hold on;
-extremes=extr(c1n);
-pos1=reshape(cell2mat(extremes(1)),[1,128]);
-peaks1=c1n .*(+pos1);
-peakgraph1=bar(c1x, peaks1);
-set (peakgraph1, 'facecolor', 'g');
-
-figure;
-[c2n, c2x] = hist(PCA(:,:,2)(:), number_of_bins);
-bar(c2x, c2n);
-title("Histogram of c2'");
-
-
-hold on;
-extremes=extr(c2n);
-pos2=reshape(cell2mat(extremes(1)),[1,128]);
-peaks2=c2n .*(+pos2);
-peakgraph2=bar(c2x, peaks2);
-set (peakgraph2, 'facecolor', 'g');
-
-figure;
-[c3n, c3x] = hist(PCA(:,:,3)(:), number_of_bins);
-bar(c3x, c3n);
-title("Histogram of c3'");
-
-hold on;
-extremes=extr(c1n);
-pos3=reshape(cell2mat(extremes(1)),[1,128]);
-peaks3=c3n .*(+pos3);
-peakgraph3=bar(c3x, peaks3);
-set (peakgraph3, 'facecolor', 'g');
-
+[c1n, c1x, extremes1] = hist_detailed(PCA(:,:,1)(:), number_of_bins, " c1'");
+[c2n, c2x, extremes2] = hist_detailed(PCA(:,:,2)(:), number_of_bins, " c2'");
+[c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
 % At = hist_size()
 
