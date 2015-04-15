@@ -1,10 +1,10 @@
 close all;
 
 % (1) Read and display the image
-I = imread('sample4.png');
+I = imread('sample1.png');
 imshow(I);
 title("Original sample image");
-figure;
+
 
 % (2) Convert to CIELab colorspace
 LAB = RGB2Lab(I);
@@ -39,6 +39,9 @@ for i = 1:120
 endfor
 R = R / 14400;
 
+clear cminusm;
+clear primed;
+
 % (5) Acquire the eigenvectors V and the eigenvalues D of the covariance matrix R
 [V, D] = eig(R);
 
@@ -56,38 +59,74 @@ PCA = zeros(120, 120, 3);
     endfor
   endfor
 
+clear cprime;
+clear i;
+clear j;
+clear k;
   
 % (7) Plot the image in the CIELab colorspace
-plot3(LAB(:,:,1), LAB(:,:,2), LAB(:,:,3), 'r.');
-xlabel('L');
-ylabel('a');
-zlabel('b');
-title("Sample image in the CIELab colorspace");
+plotCIELab = 0
+if plotCIELab == 1
+  figure;
+  plot3(LAB(:,:,1), LAB(:,:,2), LAB(:,:,3), 'r.');
+  xlabel('L');
+  ylabel('a');
+  zlabel('b');
+  title("Sample image in the CIELab colorspace");
 
 % (8) Plot the 1st, 2nd, and 3rd principal components
-scale=50;
-line1 = line([m(1) - scale * V(1,1) m(1) + scale * V(1,1)], [m(2) - scale * V(2,1) m(2) + scale * V(2,1)],[m(3) - scale * V(3,1) m(3) + scale * V(3,1)]);
-line2 = line([m(1) - scale * V(1,2) m(1) + scale * V(1,2)], [m(2) - scale * V(2,2) m(2) + scale * V(2,2)],[m(3) - scale * V(3,2) m(3) + scale * V(3,2)]);
-line3 = line([m(1) - scale * V(1,3) m(1) + scale * V(1,3)], [m(2) - scale * V(2,3) m(2) + scale * V(2,3)],[m(3) - scale * V(3,3) m(3) + scale * V(3,3)]);
+  scale=50;
+  line1 = line([m(1) - scale * V(1,1) m(1) + scale * V(1,1)], [m(2) - scale * V(2,1) m(2) + scale * V(2,1)],[m(3) - scale * V(3,1) m(3) + scale * V(3,1)]);
+  line2 = line([m(1) - scale * V(1,2) m(1) + scale * V(1,2)], [m(2) - scale * V(2,2) m(2) + scale * V(2,2)],[m(3) - scale * V(3,2) m(3) + scale * V(3,2)]);
+  line3 = line([m(1) - scale * V(1,3) m(1) + scale * V(1,3)], [m(2) - scale * V(2,3) m(2) + scale * V(2,3)],[m(3) - scale * V(3,3) m(3) + scale * V(3,3)]);
 
-set(line1, 'color', [0 0 1], "linestyle", "--")
-set(line2, 'color', [0 1 0], "linestyle", "--")
-set(line3, 'color', [0 1 1], "linestyle", "--")
+  set(line1, 'color', [0 0 1], "linestyle", "--")
+  set(line2, 'color', [0 1 0], "linestyle", "--")
+  set(line3, 'color', [0 1 1], "linestyle", "--")
 
-axis tight;
+  axis tight;
+end
 
 % (9) On a different figure, plot transformed image c'
+plotTransformedC = 0
+if plotTransformedC == 1
+  figure;
+
+  pc1 = PCA(:,:,1);
+  pc2 = PCA(:,:,2);
+  pc3 = PCA(:,:,3);
+
+  plot3(pc1, pc2, pc3, 'r.');
+  title("Color vectors after transformation");
+
+  xlabel('PC1');
+  ylabel('PC2');
+  zlabel('PC3');
+
+  axis tight;
+end
+
+% (10) 
+%  "First we initialize a color label array img(i, j )"
+img = zeros(120,120);
+
+% "and a mask array imgm(i, j)"
+%   The mask array determines whether an image pixel 
+%   is still considered to be part of the data set 
+%   for cluster detection, or whether it has already
+%   been classified.
+imgm = ones(120,120);
+
+% "compute the histograms of the color features c1, c2, and c3, one by one."
+
 figure;
+hist(PCA(:,:,1), 255, "facecolor", "r", "edgecolor", "b");
+title("Histogram of c1'");
 
-pc1 = PCA(:,:,1);
-pc2 = PCA(:,:,2);
-pc3 = PCA(:,:,3);
+figure;
+hist(PCA(:,:,2), 255, "facecolor", "r", "edgecolor", "b");
+title("Histogram of c2'");
 
-plot3(pc1, pc2, pc3, 'r.');
-title("Color vectors after transformation");
-
-xlabel('PC1');
-ylabel('PC2');
-zlabel('PC3');
-
-axis tight;
+figure;
+hist(PCA(:,:,3), 255, "facecolor", "r", "edgecolor", "b");
+title("Histogram of c3'");
