@@ -3,8 +3,8 @@ close all;
 
 % (1) Read and display the image
 I = imread('sample2.png');
-imshow(I);
-title("Original sample image");
+% imshow(I);
+% title("Original sample image");
 
 
 % (2) Convert to CIELab colorspace
@@ -29,7 +29,6 @@ PCA = LABtoPCA(LAB, m, V);
 % plotPCA(PCA);
 
 
-
 % (10)  "First we initialize a color label array img(i, j )"
 img = zeros(120,120);
 
@@ -48,7 +47,7 @@ number_of_bins = 128;
 [c2n, c2x, extremes2] = hist_detailed(PCA(:,:,2)(:), number_of_bins, " c2'");
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
-% At = hist_size()
+At = hist_size(c1n);
 
 
 % (12) "A set of significant mountains are determined by taking account
