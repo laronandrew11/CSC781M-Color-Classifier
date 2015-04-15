@@ -111,3 +111,35 @@ endfor
 %       of the heights of peaks and valley bottoms, and then a criterion
 %       function is computed to select the most significant mountain.
 %       We use the function: "
+
+% (13) In one case, if  a  histogram is multimodal, the most signifi-
+% cant mountain in the histogram is selected.  A  pair  of  thresholds
+%is determined  as  the color features corresponding to two valleys
+%at the sides of the mountain. The image is split using the thresh-
+%olds. A mask for describing the extracted subregions is created
+%on  imgm(i,  j).  We further continue with cluster detection with
+%respect to these subregions.
+
+if (rows(good_mountains)>1)
+  bestmountain;
+
+endif
+
+%(14)  In a second case, if the first histogram is noisy and has
+%no well-defined peaks, then it meets the dosing condition of the
+%sequential color classification. The remaining pixels without l i ~
+%bels become too sparse  to  create a cluster in the color space. The
+%finishing process is executed.
+if (rows(good_mountains)==0)
+endif
+
+%(15)  In the third case, one of the histograms is unimodal. If
+%the first histogram is unimodal, the succeeding second and third
+%histograms are analyzed. If all histograms are unimodal, then we
+%extract the color data which are decided to belong to one color
+%cluster. The extracted pixels are labeled on  img(i,  j).  Detection
+%of a color cluster ends. If no region without color labels remains,
+%then the finishing process is executed.
+
+if (rows(good_mountains)==1)
+endif
