@@ -1,3 +1,4 @@
+pkg load signal;
 close all;
 
 % (1) Read and display the image
@@ -65,7 +66,7 @@ clear j;
 clear k;
   
 % (7) Plot the image in the CIELab colorspace
-plotCIELab = 0
+plotCIELab = 0;
 if plotCIELab == 1
   figure;
   plot3(LAB(:,:,1), LAB(:,:,2), LAB(:,:,3), 'r.');
@@ -88,7 +89,7 @@ if plotCIELab == 1
 end
 
 % (9) On a different figure, plot transformed image c'
-plotTransformedC = 0
+plotTransformedC = 0;
 if plotTransformedC == 1
   figure;
 
@@ -106,27 +107,43 @@ if plotTransformedC == 1
   axis tight;
 end
 
-% (10) 
-%  "First we initialize a color label array img(i, j )"
+clear plotCIELab;
+clear plotTransformedC;
+
+% (10)  "First we initialize a color label array img(i, j )"
 img = zeros(120,120);
 
-% "and a mask array imgm(i, j)"
-%   The mask array determines whether an image pixel 
-%   is still considered to be part of the data set 
-%   for cluster detection, or whether it has already
-%   been classified.
+%       "and a mask array imgm(i, j)"
 imgm = ones(120,120);
+%        This mask array determines whether an image pixel 
+%        is still considered to be part of the data set 
+%        for cluster detection, or whether it has already
+%        been classified.
 
-% "compute the histograms of the color features c1, c2, and c3, one by one."
+
+
+% (11) "compute the histograms of the color features c1, c2, and c3, one by one."
+
+number_of_bins = 128;
 
 figure;
-hist(PCA(:,:,1), 255, "facecolor", "r", "edgecolor", "b");
+[c1n, c1x] = hist(PCA(:,:,1), number_of_bins);
+bar(c1x, c1n);
 title("Histogram of c1'");
 
 figure;
-hist(PCA(:,:,2), 255, "facecolor", "r", "edgecolor", "b");
+[c2n, c2x] = hist(PCA(:,:,2), number_of_bins);
+bar(c2x, c2n);
 title("Histogram of c2'");
 
 figure;
-hist(PCA(:,:,3), 255, "facecolor", "r", "edgecolor", "b");
+[c3n, c3x] = hist(PCA(:,:,3), number_of_bins);
+bar(c3x, c3n);
 title("Histogram of c3'");
+
+
+% (12) "A set of significant mountains are determined by taking account
+%       of the heights of peaks and valley bottoms, and then a criterion
+%       function is computed to select the most significant mountain.
+%       We use the function: "
+
