@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample1.png');
+I = imread('sample2.png');
 imshow(I);
 title("Original sample image");
 
@@ -134,19 +134,42 @@ figure;
 bar(c1x, c1n);
 title("Histogram of c1'");
 
+hold on;
+extremes=extr(c1n);
+pos1=reshape(cell2mat(extremes(1)),[1,128]);
+peaks1=c1n .*(+pos1);
+peakgraph1=bar(c1x, peaks1);
+set (peakgraph1, 'facecolor', 'g');
+
 figure;
 [c2n, c2x] = hist(pc2(:), number_of_bins);
 bar(c2x, c2n);
 title("Histogram of c2'");
+
+
+hold on;
+extremes=extr(c2n);
+pos2=reshape(cell2mat(extremes(1)),[1,128]);
+peaks2=c2n .*(+pos2);
+peakgraph2=bar(c2x, peaks2);
+set (peakgraph2, 'facecolor', 'g');
 
 figure;
 [c3n, c3x] = hist(pc3(:), number_of_bins);
 bar(c3x, c3n);
 title("Histogram of c3'");
 
+hold on;
+extremes=extr(c1n);
+pos3=reshape(cell2mat(extremes(1)),[1,128]);
+peaks3=c3n .*(+pos3);
+peakgraph3=bar(c3x, peaks3);
+set (peakgraph3, 'facecolor', 'g');
 
 
-%Extremes=extr(hist1);
+
+
+
 
 
 % (12) "A set of significant mountains are determined by taking account
