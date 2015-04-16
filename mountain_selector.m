@@ -63,10 +63,10 @@ while(i < number_of_bins)
   % found right valley
   rightValleyIdx = j;
   
-  NN = [0 NN 0];
-  XX = [XX(1) XX XX(128)];
   
   % Compute area of histogram between these valleys
+  NN = [0 NN 0];
+  XX = [XX(1) XX XX(128)];
   Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
 
   % Compute fwhm of this mountain
