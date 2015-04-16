@@ -20,15 +20,19 @@ At = hist_size(NN);
 good_mountains = [ ];
 
 % initializations
+number_of_bins = number_of_bins + 2;
 leftValleyIdx = 1;
 rightValleyIdx = number_of_bins;
 
 % the minimas and maximas acquired from the histogram
-maximas = extremes(1:128);
-minimas = extremes(129:256);
+maximas = [0 extremes(1:128) 0];
+minimas = [1 extremes(129:256) 1];
 
 % find the first valley
-for i = 1:number_of_bins
+i = 1
+while(i < number_of_bins)
+  hasMountain = 0;
+  
   % skip all non-valleys (mountains)
   if (minimas(i) == 0)
   	continue;
@@ -36,21 +40,34 @@ for i = 1:number_of_bins
 
   % found left valley
   leftValleyIdx = i;
-
+  printf("Left valley found: %d\n", i);
   % beginning there, find the next valley
   for j = (leftValleyIdx+1):number_of_bins
+    if (maximas(j) == 1)
+      printf("Mountain found: %d\n", j);
+      hasMountain = 1;
+    endif;
+    
     % skip all non-valleys (mountains)
   	if(minimas(j) == 0)
       continue;
+	  elseif (minimas(j) == 1 && hasMountain == 0)
+      leftValleyIdx = j;
+      printf("Left valley updated: %d\n", j);
+    elseif (hasMountain == 1)
+      printf("Right valley found: %d\n", j);
+	    break;
     endif
   endfor
-
+  
   % found right valley
   rightValleyIdx = j;
-
-
+  
+  NN = [0 NN 0];
+  XX = [XX(1) XX XX(128)];
+  
   % Compute area of histogram between these valleys
-  Ap = hist_size(NN, leftValleyIdx, rightValleyIdx);
+  Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
 
   % Compute fwhm of this mountain
   fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
@@ -64,6 +81,7 @@ for i = 1:number_of_bins
   endif
 
   % continue to the next mountain beginning at the right valley as the left valley
+  printf("Looking for valleys starting at %d\n", j);
   i = j;
-endfor
+endwhile
 mountains=good_mountains;
