@@ -1,4 +1,4 @@
-function [newRegionIndex, newImg, newImgm] = classifyImageRegions(img, imgm, LAB)
+function [newImg, newImgm] = classifyImageRegions(img, imgm, LAB)
 
 % Apply the mask
 % maskedLab = zeros(120, 120, 3);
@@ -109,8 +109,10 @@ elseif (rows(good_mountains) == 1)
     thresholdmin = good_mountains(1, 2);
     thresholdmax = good_mountains(1, 3);
     
-    region = (PCA(:,:,1) < xxx(thresholdmin)) | (PCA(:,:,1) > xxx(thresholdmax));
+    region = (PCA(:,:,c) < xxx(thresholdmin)) | (PCA(:,:,c) > xxx(thresholdmax));
     imgm = imgm .* (+region);
+    
+    region
     
     for i = 1:120
       for j = 1:120
@@ -124,3 +126,6 @@ elseif (rows(good_mountains) == 1)
   
 endif
 endfor
+
+newImg = img;
+newImgm = imgm;
