@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample2.png');
+I = imread('sample.png');
 % imshow(I);
 % title("Original sample image");
 
@@ -48,7 +48,7 @@ number_of_bins = 128;
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
 
-good_mountains=mountain_selector(c1n', c1x, extremes1, number_of_bins);
+good_mountains=mountain_selector(c1n, c1x, extremes1, number_of_bins);
 
 
 % (12) "A set of significant mountains are determined by taking account
@@ -72,7 +72,7 @@ if (rows(good_mountains)>1)
  thresholdmax=good_mountains(bestindex,3);
  %%assuming that program will then consider all regions outside the most significant mountain
  %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
- region = (PCA(:,:,1)<thresholdmin)|(PCA(:,:,1)>thresholdmax);
+ region = (PCA(:,:,1)<c1x[thresholdmin])|(PCA(:,:,1)>c1x[thresholdmax]);
  imgm=imgm.*(+region);
  %%to do: loop back to PCA on unmasked region of image
 endif
@@ -103,6 +103,7 @@ if (rows(good_mountains)==1)
   if (rows(good_mountains2)==1 &(rows(good_mountains3)==1))
     %%TODO extract color data
     %%find the position of each pixel in the region and change its value in image map
+     region = (PCA(:,:,1)>c1x[thresholdmin])&(PCA(:,:,1)<c1x[thresholdmax]);
     img(i,j)=regionIndex;
     regionIndex+=1;
   endif

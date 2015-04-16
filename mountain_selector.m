@@ -20,12 +20,13 @@ At = hist_size(NN);
 good_mountains = [ ];
 
 % initializations
+number_of_bins = number_of_bins + 2;
 leftValleyIdx = 1;
 rightValleyIdx = number_of_bins;
 
 % the minimas and maximas acquired from the histogram
-maximas = extremes(1:128);
-minimas = extremes(129:256);
+maximas = [0 extremes(1:128) 0];
+minimas = [1 extremes(129:256) 1];
 
 % find the first valley
 for i = 1:number_of_bins
@@ -42,6 +43,7 @@ for i = 1:number_of_bins
     % skip all non-valleys (mountains)
   	if(minimas(j) == 0)
       continue;
+     else break;
     endif
   endfor
 
@@ -50,7 +52,8 @@ for i = 1:number_of_bins
 
 
   % Compute area of histogram between these valleys
-  Ap = hist_size(NN, leftValleyIdx, rightValleyIdx);
+  NN=[0 NN 0];
+  Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
 
   % Compute fwhm of this mountain
   fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
