@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample3.png');
+I = imread('sample.png');
 % imshow(I);
 % title("Original sample image");
 
@@ -96,14 +96,14 @@ endif
 %       of a color cluster ends. If no region without color labels remains,
 %       then the finishing process is executed.
 
-regionIndex=0;
+regionIndex = 0;
 if (rows(good_mountains)==1)
   good_mountains2=mountain_selector(c2n, c2x, extremes2, number_of_bins);
    good_mountains3=mountain_selector(c3n, c3x, extremes3, number_of_bins);
   if (rows(good_mountains2)==1 &(rows(good_mountains3)==1))
     %%TODO extract color data
     %%find the position of each pixel in the region and change its value in image map
-    img(i,j)=regionIndex;
+    img(i,j) = regionIndex;
     regionIndex+=1;
   endif
 endif

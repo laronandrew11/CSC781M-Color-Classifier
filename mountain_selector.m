@@ -29,7 +29,7 @@ maximas = [0 extremes(1:128) 0];
 minimas = [1 extremes(129:256) 1];
 
 % find the first valley
-i = 1
+i = 1;
 while(i < number_of_bins)
   hasMountain = 0;
   
@@ -40,11 +40,11 @@ while(i < number_of_bins)
 
   % found left valley
   leftValleyIdx = i;
-  printf("Left valley found: %d\n", i);
+  % printf("Left valley found: %d\n", i);
   % beginning there, find the next valley
   for j = (leftValleyIdx+1):number_of_bins
     if (maximas(j) == 1)
-      printf("Mountain found: %d\n", j);
+      % printf("Mountain found: %d\n", j);
       hasMountain = 1;
     endif;
     
@@ -53,9 +53,9 @@ while(i < number_of_bins)
       continue;
 	  elseif (minimas(j) == 1 && hasMountain == 0)
       leftValleyIdx = j;
-      printf("Left valley updated: %d\n", j);
+      % printf("Left valley updated: %d\n", j);
     elseif (hasMountain == 1)
-      printf("Right valley found: %d\n", j);
+      % printf("Right valley found: %d\n", j);
 	    break;
     endif
   endfor
@@ -81,7 +81,7 @@ while(i < number_of_bins)
   endif
 
   % continue to the next mountain beginning at the right valley as the left valley
-  printf("Looking for valleys starting at %d\n", j);
+  % printf("Looking for valleys starting at %d\n", j);
   i = j;
 endwhile
 mountains=good_mountains;
