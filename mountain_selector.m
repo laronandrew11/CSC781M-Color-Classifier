@@ -40,12 +40,12 @@ while(i < number_of_bins)
 
   % found left valley
   leftValleyIdx = i;
-  % printf("Left valley found: %d\n", i);
+  printf("Left valley found: %d\n", i);
   % beginning there, find the next valley
   for j = (leftValleyIdx+1):number_of_bins
-    if (maximas(j) == 1)
-      % printf("Mountain found: %d\n", j);
-      hasMountain = 1;
+    if (maximas(j) != 0)
+      printf("Mountain found: %d\n", j);
+      hasMountain = j;
     endif;
     
     % skip all non-valleys (mountains)
@@ -53,9 +53,9 @@ while(i < number_of_bins)
       continue;
 	  elseif (minimas(j) == 1 && hasMountain == 0)
       leftValleyIdx = j;
-      % printf("Left valley updated: %d\n", j);
-    elseif (hasMountain == 1)
-      % printf("Right valley found: %d\n", j);
+      printf("Left valley updated: %d\n", j);
+    elseif (hasMountain != 0)
+      printf("Right valley found: %d\n", j);
 	    break;
     endif
   endfor
@@ -66,18 +66,26 @@ while(i < number_of_bins)
   
   % Compute area of histogram between these valleys
   NN = [0 NN 0];
-  XX = [XX(1) XX XX(128)];
-  Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
+  
+  if (hasMountain != 0)
+    printf("Mountain at [%d] [%d] [%d]\n\n", leftValleyIdx, hasMountain, rightValleyIdx);
+  
+  
+    XX = [XX(1) XX XX(128)];
+    Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
 
-  % Compute fwhm of this mountain
-  fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
+    % Compute fwhm of this mountain
+    fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
 
-  % Avoid division by zero
-  if (fwhmValue > 0)
-    f = ( Ap / At ) * (100 / fwhmValue);
+    % Avoid division by zero
+    if (fwhmValue > 0)
+      f = ( Ap / At ) * (100 / fwhmValue);
 
-    % insert into list
-    good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];
+      % insert into list
+      good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];
+    else
+      printf("fwhm was found to be zero\n\n");
+    endif
   endif
 
   % continue to the next mountain beginning at the right valley as the left valley

@@ -1,18 +1,22 @@
-function [newRegionIndex, newImg, newImgm] = classifyImageRegions(regionIndeximg, imgm, LAB)
+function [newRegionIndex, newImg, newImgm] = classifyImageRegions(img, imgm, LAB)
 
 % Apply the mask
-maskedLab = zeros(120, 120, 3);
-for i = 1:120
-  for j = 1:120
-    for k = 1:3
-    
-      if LAB(i,j,k) == 0
-        printf("A zero!\n");
-      endif
-      maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
-    endfor
-  endfor
-endfor
+% maskedLab = zeros(120, 120, 3);
+% for i = 1:120
+%   for j = 1:120
+%     for k = 1:3
+%     
+%       if LAB(i,j,k) == 0
+%         printf("A zero!\n");
+%       endif
+%       maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
+%     endfor
+%   endfor
+% endfor
+
+maskedLab = LAB;
+
+printf("Mask will process %d values.\n\n", sum(sum(imgm)));
 
 % (3) Acquire the mean vector m and (4) acquire the covariance matrix R
 [R, m] = cov3(maskedLab);
@@ -40,7 +44,6 @@ number_of_bins = 128;
 
 good_mountains = mountain_selector(c1n, c1x, extremes1, number_of_bins);
 
-
 % (12) "A set of significant mountains are determined by taking account
 %       of the heights of peaks and valley bottoms, and then a criterion
 %       function is computed to select the most significant mountain.
@@ -64,7 +67,7 @@ if (rows(good_mountains) > 1)
  %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
  region = (PCA(:,:,1) < thresholdmin) | (PCA(:,:,1) > thresholdmax);
  imgm = imgm .* (+region);
- classifyImageRegions(img, imgm, LAB);
+ % classifyImageRegions(img, imgm, LAB);
 endif
 
 
@@ -90,6 +93,7 @@ endif
 
 regionIndex = 0;
 if (rows(good_mountains) == 1)
+  printf("Hey it's unimodal!\n\n");
   good_mountains2 = mountain_selector(c2n, c2x, extremes2, number_of_bins);
    good_mountains3 = mountain_selector(c3n, c3x, extremes3, number_of_bins);
   if (rows(good_mountains2) == 1 &(rows(good_mountains3) == 1)) %%if 2nd and 3rd histograms are unimodal, mark region on img.
