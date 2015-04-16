@@ -48,7 +48,7 @@ number_of_bins = 128;
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
 
-good_mountains=mountain_selector(c1n', c1x, number_of_bins);
+good_mountains=mountain_selector(c1n', c1x, extremes1, number_of_bins);
 
 
 % (12) "A set of significant mountains are determined by taking account
