@@ -26,3 +26,5 @@ imgm = ones(120,120);
 number_of_bins = 128;
 
 classifyImageRegions(img, imgm, LAB);
+
+img

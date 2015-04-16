@@ -82,10 +82,22 @@ while(i < number_of_bins)
       f = ( Ap / At ) * (100 / fwhmValue);
 
       % insert into list
-      good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];
     else
       printf("fwhm was found to be zero\n\n");
+      f = 0;
     endif
+    
+    leftValleyIdx = leftValleyIdx - 1;
+    if (leftValleyIdx <= 0)
+      leftValleyIdx = 1;
+    endif;
+    
+    rightValleyIdx = rightValleyIdx - 1;
+    if (rightValleyIdx >= 128)
+      rightValleyIdx = 128;
+    endif;
+    
+    good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];
   endif
 
   % continue to the next mountain beginning at the right valley as the left valley

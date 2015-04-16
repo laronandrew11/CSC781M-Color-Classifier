@@ -41,9 +41,16 @@ number_of_bins = 128;
 [c2n, c2x, extremes2] = hist_detailed(PCA(:,:,2)(:), number_of_bins, " c2'");
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
+whos c1*;
 
-good_mountains = mountain_selector(c1n, c1x, extremes1, number_of_bins);
+classes = [c1n, c1x, extremes1;
+           c2n, c2x, extremes2;
+           c3n, c3x, extremes3];
+           
+whos classes
 
+for c = 1:3
+  
 % (12) "A set of significant mountains are determined by taking account
 %       of the heights of peaks and valley bottoms, and then a criterion
 %       function is computed to select the most significant mountain.
@@ -57,31 +64,31 @@ good_mountains = mountain_selector(c1n, c1x, extremes1, number_of_bins);
 %      olds. A mask for describing the extracted subregions is created
 %      on imgm(i, j). We further continue with cluster detection with
 %      respect to these subregions.
+nnn = classes(c,1:128);
+xxx = classes(c,129:256);
+
+  good_mountains = mountain_selector(nnn, xxx, classes(c,257:512), number_of_bins);
 
 if (rows(good_mountains) > 1)
- bestmountain = max(good_mountains(:,1));
- bestindex = find(good_mountains(:, 1) == bestmountain, 1);
- thresholdmin = good_mountains(bestindex, 2);
- thresholdmax = good_mountains(bestindex, 3);
- %%assuming that program will then consider all regions outside the most significant mountain
- %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
- region = (PCA(:,:,1) < thresholdmin) | (PCA(:,:,1) > thresholdmax);
- imgm = imgm .* (+region);
- % classifyImageRegions(img, imgm, LAB);
-endif
-
+  bestmountain = max(good_mountains(:,1));
+  bestindex = find(good_mountains(:, 1) == bestmountain, 1);
+  thresholdmin = good_mountains(bestindex, 2);
+  thresholdmax = good_mountains(bestindex, 3);
+  %%assuming that program will then consider all regions outside the most significant mountain
+  %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
+  region = (PCA(:,:,1) < xxx(thresholdmin)) | (PCA(:,:,1) > xxx(thresholdmax));
+  imgm = imgm .* (+region);
+  % classifyImageRegions(img, imgm, LAB);
 
 % (14) "In a second case, if the first histogram is noisy and has no 
 % 		well-defined peaks, then it meets the dosing condition of the
 % 		sequential color classification. The remaining pixels without l i ~
 % 		bels become too sparse to create a cluster in the color space. The
 % 		finishing process is executed.
-if (rows(good_mountains) == 0)
+elseif (rows(good_mountains) == 0)
   newImg = img;
   newImgm = imgm;
   newLAB = LAB;
-endif
-
 
 % (15) "In the third case, one of the histograms is unimodal. If the 
 %       first histogram is unimodal, the succeeding second and third
@@ -91,16 +98,29 @@ endif
 %       of a color cluster ends. If no region without color labels remains,
 %       then the finishing process is executed.
 
-regionIndex = 0;
-if (rows(good_mountains) == 1)
-  printf("Hey it's unimodal!\n\n");
-  good_mountains2 = mountain_selector(c2n, c2x, extremes2, number_of_bins);
-   good_mountains3 = mountain_selector(c3n, c3x, extremes3, number_of_bins);
-  if (rows(good_mountains2) == 1 &(rows(good_mountains3) == 1)) %%if 2nd and 3rd histograms are unimodal, mark region on img.
-    %%TODO extract color data
-    %%find the position of each pixel in the region and change its value in image map
-    img(i, j) = regionIndex;
-    imgm(i, j) = 0;
-    regionIndex += 1;
+
+elseif (rows(good_mountains) == 1)
+  printf("Hey it's unimodal (%d)!\n\n", c);
+  if (c == 3)
+    prevCluster = regionIndex = max(max(img));
+    printf("The previous cluster is %d", prevCluster);
+    regionIndex = prevCluster + 1;
+    
+    thresholdmin = good_mountains(1, 2);
+    thresholdmax = good_mountains(1, 3);
+    
+    region = (PCA(:,:,1) < xxx(thresholdmin)) | (PCA(:,:,1) > xxx(thresholdmax));
+    imgm = imgm .* (+region);
+    
+    for i = 1:120
+      for j = 1:120
+          if region(i,j) == 0
+            img(i,j) = regionIndex;
+          endif
+       endfor
+    endfor
+    
   endif
+  
 endif
+endfor
