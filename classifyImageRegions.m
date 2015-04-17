@@ -97,8 +97,20 @@ if (rows(good_mountains) > 1)
   
   imgm = imgm .* (+region);
   
- % region
+ % classify area inside best mountain
+ [imgInner, imgmInner]=classifyImageRegions(img, !imgm, LAB, iterationNo+1);
   
+  %update img to get the classified regions
+  for f=1:rows(region)
+    for g=1:columns(region)
+      if(region(f,g)==0)
+       img(f,g)=imgInner(f,g);
+      endif
+    endfor
+  endfor
+  
+  
+  %classify area outside best mountain
  [b,c] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
  
  img = b;
