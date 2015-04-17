@@ -70,7 +70,7 @@ if (quantity > 0)
         
         % select the mountain for the region
         % classify mountain
-        classified = (PCA(:,:,c) >= xxx(thresholdmin) - step) & (PCA(:,:,c) <= xxx(thresholdmax));
+        classified = (PCA(:,:,c) >= xxx(thresholdmin) - step) & (PCA(:,:,c) <= xxx(thresholdmax) + step);
         imgclass = imgclass .+ (newCluster * classified);
         imgm = !imgclass;
       endif
