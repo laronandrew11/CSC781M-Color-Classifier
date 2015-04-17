@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample2.png');
+I = imread('sample1.png');
 % imshow(I);
 % title("Original sample image");
 

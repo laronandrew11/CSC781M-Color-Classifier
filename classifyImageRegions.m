@@ -6,10 +6,16 @@ for i = 1:120
   for j = 1:120
     for k = 1:3
     
-      if LAB(i,j,k) == 0
-        printf("A zero!\n");
-      endif
-      maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
+     % if LAB(i,j,k) == 0
+        %printf("A zero!\n");
+      %endif
+  
+     bigMask=!imgm;
+     bigMask.*1.0e009;
+    bigMask=bigMask+1;
+      
+     %maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
+     maskedLab(i,j,k) = bigMask(i,j) .* LAB(i,j,k);
     endfor
   endfor
 endfor
