@@ -14,13 +14,13 @@ function [NN, XX, extremes] = hist_detailed(X, n, hist_title) %   Area of a hist
 %~~~~~~~~~~~~~~~~~~~~~~~~~
 	if nargin > 2
       figure;
-      [NN, XX] = hist(X, n);
+      [NN, XX] = hist(X, n);  
       bar(XX, NN);
       title( strcat("Histogram of ", hist_title) );
       
       hold on;
       extremes = extr(NN);
-      pos1 = reshape(cell2mat(extremes(1)),[1,128]);
+      pos1 = reshape(cell2mat(extremes(1)), [1,128]);
       pos2 = reshape(cell2mat(extremes(2)), [1,128]);
       extremes = [pos1 pos2];
       

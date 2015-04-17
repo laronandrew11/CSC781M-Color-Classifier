@@ -27,6 +27,7 @@ function PCA = LABtoPCA(Lab, m, V)     % Computes the PCA
   
     for i = 1:size
       for j = 1:size
+      
         cprime = V' * (Lab(i, j) - m);
       
         for k = 1:3

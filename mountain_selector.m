@@ -30,6 +30,11 @@ minimas = [1 extremes(129:256) 1];
 
 % find the first valley
 i = 1;
+
+NN = [0 NN 0];
+step = XX(2) - XX(1);
+XX = [(XX(1) - step) XX (XX(128)+step)];
+    
 while(i < number_of_bins)
   hasMountain = 0;
   
@@ -65,15 +70,12 @@ while(i < number_of_bins)
   
   
   % Compute area of histogram between these valleys
-  NN = [0 NN 0];
   
   if (hasMountain != 0)
-    printf("Mountain at [%d] [%d] [%d]\n", leftValleyIdx, hasMountain, rightValleyIdx);
+    % printf("Mountain at [%d] [%d] [%d]\n", leftValleyIdx, hasMountain, rightValleyIdx);
   
-  
-    XX = [XX(1) XX XX(128)];
     Ap = hist_size(NN', leftValleyIdx, rightValleyIdx);
-
+    
     % Compute fwhm of this mountain
     fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
 

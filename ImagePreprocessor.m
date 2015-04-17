@@ -2,11 +2,9 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample1.png');
+I = imread('lena.png');
 % imshow(I);
 % title("Original sample image");
-
-
 
 % (2) Convert to CIELab colorspace
 LAB = RGB2Lab(I);
@@ -25,9 +23,10 @@ imgm = ones(120,120);
 
 number_of_bins = 128;
 
-[b, c] = classifyImageRegions(img, imgm, LAB,0);
+% [b, c] = classifyImageRegions(img, imgm, LAB,0);
+ [a, b, c] = try2classify(LAB, [ones(120,120)], img, imgm, 0);
 
 img = b;
 imgm = c;
 
-plot(img);
+% plot(img);
