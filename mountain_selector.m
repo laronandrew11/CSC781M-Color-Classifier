@@ -40,11 +40,11 @@ while(i < number_of_bins)
 
   % found left valley
   leftValleyIdx = i;
-  printf("Left valley found: %d\n", i);
+  % printf("Left valley found: %d\n", i);
   % beginning there, find the next valley
   for j = (leftValleyIdx+1):number_of_bins
     if (maximas(j) != 0)
-      printf("Mountain found: %d\n", j);
+      % printf("Mountain found: %d\n", j);
       hasMountain = j;
     endif;
     
@@ -53,9 +53,9 @@ while(i < number_of_bins)
       continue;
 	  elseif (minimas(j) == 1 && hasMountain == 0)
       leftValleyIdx = j;
-      printf("Left valley updated: %d\n", j);
+      % printf("Left valley updated: %d\n", j);
     elseif (hasMountain != 0)
-      printf("Right valley found: %d\n", j);
+      % printf("Right valley found: %d\n", j);
 	    break;
     endif
   endfor
@@ -68,7 +68,7 @@ while(i < number_of_bins)
   NN = [0 NN 0];
   
   if (hasMountain != 0)
-    printf("Mountain at [%d] [%d] [%d]\n\n", leftValleyIdx, hasMountain, rightValleyIdx);
+    printf("Mountain at [%d] [%d] [%d]\n", leftValleyIdx, hasMountain, rightValleyIdx);
   
   
     XX = [XX(1) XX XX(128)];
@@ -83,7 +83,7 @@ while(i < number_of_bins)
 
       % insert into list
     else
-      printf("fwhm was found to be zero\n\n");
+      % printf("fwhm was found to be zero\n\n");
       f = 0;
     endif
     
