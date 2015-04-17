@@ -1,5 +1,5 @@
-function [newImg, newImgm] = classifyImageRegions(img, imgm, LAB)
-
+function [newImg, newImgm] = classifyImageRegions(img, imgm, LAB, iterationNo)
+printf("*****DEPTH %d **********\n",iterationNo);
 % Apply the mask
 maskedLab = zeros(120, 120, 3);
 for i = 1:120
@@ -88,7 +88,7 @@ if (rows(good_mountains) > 1)
   
  % region
   
- [b,c] = classifyImageRegions(img, imgm, LAB);
+ [b,c] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
  
  img = b;
  imgm = c;
@@ -135,11 +135,12 @@ elseif (rows(good_mountains) == 1)
           endif
        endfor
     endfor
-    
+    if(sum(imgm)==0)
+      newImg = img;
+      newImgm = imgm;
+     endif
   endif
   
 endif
 endfor
 
-newImg = img;
-newImgm = imgm;

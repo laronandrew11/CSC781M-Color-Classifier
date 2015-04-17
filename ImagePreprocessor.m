@@ -25,7 +25,7 @@ imgm = ones(120,120);
 
 number_of_bins = 128;
 
-[b, c] = classifyImageRegions(img, imgm, LAB);
+[b, c] = classifyImageRegions(img, imgm, LAB,0);
 
 img = b;
 imgm = c;
