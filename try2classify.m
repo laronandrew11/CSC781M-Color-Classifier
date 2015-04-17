@@ -1,33 +1,27 @@
-function [img, newImgClass, newImgMask] = try2classify(LAB, region, imgclass, imgm, depth)
+function [newImgClass, newImgMask] = try2classify(LAB, imgclass, imgm, depth)
 printf(" ** Depth %d **\n", depth);
 % Apply the mask
 s = length(LAB);
-toProcess = zeros(s, s);
-for i = 1:s
-  for j = 1:s
-    toProcess(i,j) = region(i,j) * imgm(i,j);
-  endfor
-endfor
 
-imshow(mat2gray(toProcess));
+imshow(mat2gray(imgm));
 title(strcat("Mask at depth ", num2str(depth)));
 %imshow(mat2gray(imgm));
 %title(strcat("imgm at depth ", num2str(depth)));
 
 % how many values are in the mask?
-quantity = sum(sum(toProcess));
+quantity = sum(sum(imgm));
 printf("Mask will process %d values.\n\n", quantity);
 
 if (quantity > 0)
 
   % get mean vector m, and covariance mat R
-  [R, m] = cov3_masked(LAB, toProcess);
+  [R, m] = cov3_masked(LAB, imgm);
 
   % get eigenvectors V and eigenvalues D
   [V, D] = eig(R);
 
   % transform CIELab -> PCA
-  PCA = LABtoPCA_masked(LAB, toProcess, m, V);
+  PCA = LABtoPCA_masked(LAB, imgm, m, V);
 
   % plotPCA(PCA, V, 150);
 
@@ -42,12 +36,13 @@ if (quantity > 0)
     
     for i = 1:s
       for j = 1:s
-        if (PCA(i,j,c) != 0)
+        if (PCA(i,j,c) != 1e999)
           filtered_PCA = [filtered_PCA PCA(i,j,c)];
         endif
       endfor
     endfor
     
+    filtered = length(filtered_PCA)
     [nnn, xxx, extremes] = hist_detailed(filtered_PCA, number_of_bins, strcat("c", num2str(c), "' of depth ", num2str(depth)));  
     
     % get the size of one histogram step
@@ -64,7 +59,7 @@ if (quantity > 0)
       printf(" unimodal \n");
       
       if (c == 3)
-        newCluster = max(max(LAB)) + 1;
+        newCluster = max(max(imgclass)) + 1;
         
         % thresholds for the mountain
         thresholdmin = good_mountains(1, 2);
@@ -73,8 +68,8 @@ if (quantity > 0)
         % select the mountain for the region
         % classify mountain
         classified = (PCA(:,:,c) >= xxx(thresholdmin) - step) & (PCA(:,:,c) <= xxx(thresholdmax));
-        imgclass = imgclass .* (newCluster * classified);
-        imgm = !newImgClass;
+        imgclass = imgclass .+ (newCluster * classified);
+        imgm = !imgclass;
       endif
       
     elseif (rows(good_mountains) == 0)
@@ -87,22 +82,29 @@ if (quantity > 0)
       bestindex = find(good_mountains(:, 1) == bestmountain, 1);
       thresholdmin = good_mountains(bestindex, 2);
       thresholdmax = good_mountains(bestindex, 3);
-
-      ROI = !(PCA(:,:,c) <= xxx(thresholdmin) - step) | (PCA(:,:,c) >= xxx(thresholdmax));
-      imgm = imgm .* (+ROI);
       
-      [newImg, imgInner, imgmInner] = try2classify(LAB, ROI, imgclass, imgm, depth + 1);
+      % printf("best mountain - %d to %d\n", thresholdmin, thresholdmax);
+      
+      region = (PCA(:,:,c) != 1e999) & (PCA(:,:,c) >= xxx(thresholdmin) - step) & (PCA(:,:,c) <= xxx(thresholdmax) + step);
+      
+      % (xxx(thresholdmin) - step)
+      % xxx(thresholdmax)
+      
+      printf("current - %d, region - %d\n", quantity, sum(sum(region)));
+      
+      [imgInner, imgmInner] = try2classify(LAB, imgclass, region, depth + 1);
+      printf("I got out\n");
       
       for i = 1:s
         for j = 1:s
-          if (ROI(i,j) == 1)
+          if (region(i,j) == 1)
             imgclass(i,j) = imgInner(i,j);
           endif
         endfor
       endfor
 
-      imgm = imgm .* (+imgmOuter);
-      [newImg, imgOuter, imgmOuter] = try2classify(LAB, imgm, imgclass, imgm, depth + 1);
+      outRegion = imgm .* !(+region);
+      [imgOuter, imgmOuter] = try2classify(LAB, imgclass, outRegion, depth + 1);
     
       for i = 1:s
         for j = 1:s
@@ -112,11 +114,14 @@ if (quantity > 0)
         endfor
       endfor
       
+      break;
       
     endif
   endfor
 endif
-img = LAB;
+
 newImgClass = imgclass;
 newImgMask = imgm;
+printf("I finished\n");
+
 endfunction

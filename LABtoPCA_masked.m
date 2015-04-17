@@ -12,8 +12,10 @@ function PCA = LABtoPCA_masked(Lab, mask, m, V)     % Computes the PCA
           for k = 1:3
             PCA(i,j,k) = cprime(k);
           endfor
-%        else
-%          PCA(i,j,k) = 0;
+        else
+          PCA(i,j,1) = 1e999;
+          PCA(i,j,2) = 1e999;
+          PCA(i,j,3) = 1e999;
         endif
       endfor
     endfor

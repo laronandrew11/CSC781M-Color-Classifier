@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('lena.png');
+I = imread('sample2.png');
 % imshow(I);
 % title("Original sample image");
 
@@ -24,9 +24,13 @@ imgm = ones(120,120);
 number_of_bins = 128;
 
 % [b, c] = classifyImageRegions(img, imgm, LAB,0);
- [a, b, c] = try2classify(LAB, [ones(120,120)], img, imgm, 0);
+ [b, c] = try2classify(LAB, img, imgm, 0);
 
 img = b;
 imgm = c;
+
+imshow(mat2gray(img));
+title(strcat("You win!"));
+
 
 % plot(img);
