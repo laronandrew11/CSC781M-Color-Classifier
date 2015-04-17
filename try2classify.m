@@ -1,16 +1,19 @@
 function [newImgClass, newImgMask] = try2classify(LAB, imgclass, imgm, depth)
-printf(" ** Depth %d **\n", depth);
 % Apply the mask
 s = length(LAB);
 
-imshow(mat2gray(imgm));
-title(strcat("Mask at depth ", num2str(depth)));
+%imshow(mat2gray(imgm));
+%title(strcat("Mask at depth ", num2str(depth)));
 %imshow(mat2gray(imgm));
 %title(strcat("imgm at depth ", num2str(depth)));
 
+for i = 1:depth
+  printf(" ");
+endfor
+
 % how many values are in the mask?
 quantity = sum(sum(imgm));
-printf("Mask will process %d values.\n\n", quantity);
+printf("%d\n", quantity);
 
 if (quantity > 0)
 
@@ -42,7 +45,7 @@ if (quantity > 0)
       endfor
     endfor
     
-    filtered = length(filtered_PCA)
+    % filtered = length(filtered_PCA)
     [nnn, xxx, extremes] = hist_detailed(filtered_PCA, number_of_bins, strcat("c", num2str(c), "' of depth ", num2str(depth)));  
     
     % get the size of one histogram step
@@ -56,7 +59,7 @@ if (quantity > 0)
     
     if (rows(good_mountains) == 1)
       % unimodal
-      printf(" unimodal \n");
+      % printf(" unimodal \n");
       
       if (c == 3)
         newCluster = max(max(imgclass)) + 1;
@@ -73,10 +76,10 @@ if (quantity > 0)
       endif
       
     elseif (rows(good_mountains) == 0)
-      printf("  noisy  \n");
+      % printf("  noisy  \n");
 
     elseif (rows(good_mountains) > 1)
-      printf("  mult ayy modalmao  \n");
+      % printf("  mult ayy modalmao  \n");
     
       bestmountain = max(good_mountains(:, 1));
       bestindex = find(good_mountains(:, 1) == bestmountain, 1);
@@ -90,10 +93,10 @@ if (quantity > 0)
       % (xxx(thresholdmin) - step)
       % xxx(thresholdmax)
       
-      printf("current - %d, region - %d\n", quantity, sum(sum(region)));
+      % printf("current - %d, region - %d\n", quantity, sum(sum(region)));
       
       [imgInner, imgmInner] = try2classify(LAB, imgclass, region, depth + 1);
-      printf("I got out\n");
+      % printf("I got out\n");
       
       for i = 1:s
         for j = 1:s
@@ -122,6 +125,10 @@ endif
 
 newImgClass = imgclass;
 newImgMask = imgm;
-printf("I finished\n");
+
+for i = 1:depth
+  printf(" ");
+endfor
+printf("Pop\n");
 
 endfunction

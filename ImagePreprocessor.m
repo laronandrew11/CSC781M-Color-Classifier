@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample2.png');
+I = imread('sample3.png');
 % imshow(I);
 % title("Original sample image");
 
@@ -28,6 +28,12 @@ number_of_bins = 128;
 
 img = b;
 imgm = c;
+
+m = max(max(img));
+
+if (m == 0)
+  img = img ./ m;
+endif
 
 imshow(mat2gray(img));
 title(strcat("You win!"));
