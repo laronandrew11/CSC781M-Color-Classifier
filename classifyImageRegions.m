@@ -95,25 +95,27 @@ if (rows(good_mountains) > 1)
   
   region = (PCA(:,:,c) <= xxx(thresholdmin) - step) | (PCA(:,:,c) >= xxx(thresholdmax));
   
-  imgm = imgm .* (+region);
+  
   
  % classify area inside best mountain
  [imgInner, imgmInner]=classifyImageRegions(img, !region, LAB, iterationNo+1);
-  
-  img=updateImageRegions(img, imgInner, !region);
   %update img to get the classified regions
-  for f=1:rows(region)
-    for g=1:columns(region)
-      if(region(f,g)==0)
-       img(f,g)=imgInner(f,g);
-      endif
-    endfor
-  endfor
+  img=updateImageRegions(img, imgInner, !region);
   
+ % for f=1:rows(region)
+   % for g=1:columns(region)
+    %  if(region(f,g)==0)
+   %    img(f,g)=imgInner(f,g);
+    %  endif
+   % endfor
+ % endfor
   
-  %classify area outside best mountain
+  %update imgm to reflect that region has been classified
+  imgm = imgm .* (+region);
+  
+  %classify unclassified area outside best mountain
  [imgOuter,c] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
- 
+ %update img with regions found outside best mountain
  img=updateImageRegions(img, imgOuter,imgm);
  imgm = c;
  

@@ -30,4 +30,5 @@ number_of_bins = 128;
 img = b;
 imgm = c;
 
-plot(img);
+showImageMatrix(img);
+
