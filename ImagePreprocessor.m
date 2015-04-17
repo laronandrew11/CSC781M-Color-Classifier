@@ -2,7 +2,7 @@ pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample6.png');
+I = imread('sample2.png');
 % imshow(I);
 % title("Original sample image");
 
@@ -27,5 +27,7 @@ number_of_bins = 128;
 
 [b, c] = classifyImageRegions(img, imgm, LAB);
 
-img = b
-imgm=c
+img = b;
+imgm = c;
+
+plot(img);
