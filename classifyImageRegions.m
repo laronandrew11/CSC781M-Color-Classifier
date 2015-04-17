@@ -1,20 +1,20 @@
 function [newImg, newImgm] = classifyImageRegions(img, imgm, LAB)
 
 % Apply the mask
-% maskedLab = zeros(120, 120, 3);
-% for i = 1:120
-%   for j = 1:120
-%     for k = 1:3
-%     
-%       if LAB(i,j,k) == 0
-%         printf("A zero!\n");
-%       endif
-%       maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
-%     endfor
-%   endfor
-% endfor
+maskedLab = zeros(120, 120, 3);
+for i = 1:120
+  for j = 1:120
+    for k = 1:3
+    
+      if LAB(i,j,k) == 0
+        printf("A zero!\n");
+      endif
+      maskedLab(i,j,k) = imgm(i,j) * LAB(i,j,k);
+    endfor
+  endfor
+endfor
 
-maskedLab = LAB;
+% maskedLab = LAB;
 
 printf("Mask will process %d values.\n\n", sum(sum(imgm)));
 
@@ -41,14 +41,11 @@ number_of_bins = 128;
 [c2n, c2x, extremes2] = hist_detailed(PCA(:,:,2)(:), number_of_bins, " c2'");
 [c3n, c3x, extremes3] = hist_detailed(PCA(:,:,3)(:), number_of_bins, " c3'");
 
-whos c1*;
 
 classes = [c1n, c1x, extremes1;
            c2n, c2x, extremes2;
            c3n, c3x, extremes3];
            
-whos classes
-
 for c = 1:3
   
 % (12) "A set of significant mountains are determined by taking account
@@ -67,25 +64,42 @@ for c = 1:3
 nnn = classes(c,1:128);
 xxx = classes(c,129:256);
 
+step = xxx(2) - xxx(1);
+
   good_mountains = mountain_selector(nnn, xxx, classes(c,257:512), number_of_bins);
 
 if (rows(good_mountains) > 1)
-  bestmountain = max(good_mountains(:,1));
+  printf("Hey it's multimodal (%d)!\n\n", c);
+  bestmountain = max(good_mountains(:, 1));
   bestindex = find(good_mountains(:, 1) == bestmountain, 1);
   thresholdmin = good_mountains(bestindex, 2);
   thresholdmax = good_mountains(bestindex, 3);
   %%assuming that program will then consider all regions outside the most significant mountain
   %%check all values in PC1 matrix. If they fall between min and max thresholds, set the value with the same index in imgm to 0.
-  region = (PCA(:,:,1) < xxx(thresholdmin)) | (PCA(:,:,1) > xxx(thresholdmax));
+  
+%  (xxx(thresholdmin) - step)
+%  xxx(thresholdmax)
+%  PCA(:,:,c)
+  
+  
+  region = (PCA(:,:,c) <= xxx(thresholdmin) - step) | (PCA(:,:,c) >= xxx(thresholdmax));
+  
   imgm = imgm .* (+region);
-  % classifyImageRegions(img, imgm, LAB);
-
+  
+ % region
+  
+ [b,c] = classifyImageRegions(img, imgm, LAB);
+ 
+ img = b;
+ imgm = c;
+ 
 % (14) "In a second case, if the first histogram is noisy and has no 
 % 		well-defined peaks, then it meets the dosing condition of the
 % 		sequential color classification. The remaining pixels without l i ~
 % 		bels become too sparse to create a cluster in the color space. The
 % 		finishing process is executed.
 elseif (rows(good_mountains) == 0)
+  printf("Hey it's noisy (%d)!\n\n", c);
   newImg = img;
   newImgm = imgm;
   newLAB = LAB;
@@ -103,16 +117,16 @@ elseif (rows(good_mountains) == 1)
   printf("Hey it's unimodal (%d)!\n\n", c);
   if (c == 3)
     prevCluster = regionIndex = max(max(img));
-    printf("The previous cluster is %d", prevCluster);
+    printf(" ** The previous cluster is %d **\n", prevCluster);
     regionIndex = prevCluster + 1;
     
     thresholdmin = good_mountains(1, 2);
     thresholdmax = good_mountains(1, 3);
     
-    region = (PCA(:,:,c) < xxx(thresholdmin)) | (PCA(:,:,c) > xxx(thresholdmax));
+    region = (PCA(:,:,c) <= xxx(thresholdmin) - step) | (PCA(:,:,c) >= xxx(thresholdmax));
     imgm = imgm .* (+region);
     
-    region
+   %  region
     
     for i = 1:120
       for j = 1:120
