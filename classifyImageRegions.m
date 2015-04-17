@@ -100,7 +100,7 @@ if (rows(good_mountains) > 1)
  % classify area inside best mountain
  [imgInner, imgmInner]=classifyImageRegions(img, !region, LAB, iterationNo+1);
   
-  updateImageRegions(img, imgInner, !region);
+  img=updateImageRegions(img, imgInner, !region);
   %update img to get the classified regions
   for f=1:rows(region)
     for g=1:columns(region)
@@ -114,7 +114,7 @@ if (rows(good_mountains) > 1)
   %classify area outside best mountain
  [imgOuter,c] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
  
- updateImageRegions(img, imgOuter,imgm);
+ img=updateImageRegions(img, imgOuter,imgm);
  imgm = c;
  
 % (14) "In a second case, if the first histogram is noisy and has no 
