@@ -77,10 +77,15 @@ while(i < number_of_bins)
     % Compute fwhm of this mountain
     fwhmValue = fwhm(XX(leftValleyIdx:rightValleyIdx), NN(leftValleyIdx:rightValleyIdx));
 
+    if(At==0)
+      printf("At is 0\n");
+     endif
+    
     % Avoid division by zero
-    if (fwhmValue > 0)
+    if (fwhmValue > 0&&At>0)
       f = ( Ap / At ) * (100 / fwhmValue);
 
+      
       % insert into list
     else
       % printf("fwhm was found to be zero\n\n");
