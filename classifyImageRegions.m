@@ -114,11 +114,12 @@ if (rows(good_mountains) > 1)
   imgm = imgm .* (+region);
   
   %classify unclassified area outside best mountain
- [imgOuter,c] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
+ [imgOuter,imgmOuter] = classifyImageRegions(img, imgm, LAB, iterationNo+1);
  %update img with regions found outside best mountain
  img=updateImageRegions(img, imgOuter,imgm);
- imgm = c;
+ newImgm = imgm.*(+imgmOuter);
  
+ newImg=img;
 % (14) "In a second case, if the first histogram is noisy and has no 
 % 		well-defined peaks, then it meets the dosing condition of the
 % 		sequential color classification. The remaining pixels without l i ~
@@ -150,7 +151,7 @@ elseif (rows(good_mountains) == 1)
     thresholdmax = good_mountains(1, 3);
     
     region = (PCA(:,:,c) <= xxx(thresholdmin) - step) | (PCA(:,:,c) >= xxx(thresholdmax));
-    imgm = imgm .* (+region);
+    
     
    %  region
     
@@ -161,6 +162,9 @@ elseif (rows(good_mountains) == 1)
           endif
        endfor
     endfor
+    
+    imgm = imgm .* (+region);
+    
     if(sum(imgm)==0)
       newImg = img;
       newImgm = imgm;
