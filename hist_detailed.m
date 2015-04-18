@@ -20,8 +20,8 @@ function [NN, XX, extremes] = hist_detailed(X, n, hist_title) %   Area of a hist
       
       %hold on;
       extremes = extr(NN);
-      pos1 = reshape(cell2mat(extremes(1)), [1,128]);
-      pos2 = reshape(cell2mat(extremes(2)), [1,128]);
+      pos1 = reshape(cell2mat(extremes(1)), [1,n]);
+      pos2 = reshape(cell2mat(extremes(2)), [1,n]);
       extremes = [pos1 pos2];
       
       peaks1 = NN .*(+pos1);

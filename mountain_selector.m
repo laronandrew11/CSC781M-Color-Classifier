@@ -19,23 +19,25 @@ At = hist_size(NN);
 % format is [idx leftvalleyidx rightvalleyidx]
 good_mountains = [ ];
 
-% initializations
-number_of_bins = number_of_bins + 2;
-leftValleyIdx = 1;
-rightValleyIdx = number_of_bins;
-
 % the minimas and maximas acquired from the histogram
-maximas = [0 extremes(1:128) 0];
-minimas = [1 extremes(129:256) 1];
+maximas = [0 extremes(1:number_of_bins) 0];
+minimas = [1 extremes((number_of_bins+1):(number_of_bins*2)) 1];
 
 % find the first valley
 i = 1;
 
 NN = [0 NN 0];
 step = XX(2) - XX(1);
-XX = [(XX(1) - step) XX (XX(128)+step)];
+XX = [(XX(1) - step) XX (XX(number_of_bins)+step)];
+
+
+% Only after padding it should the local variable 'number of bins' be incremented
+padded_number_of_bins = number_of_bins + 2;
+leftValleyIdx = 1;
+rightValleyIdx = padded_number_of_bins;
+
     
-while(i < number_of_bins)
+while(i < padded_number_of_bins)
   hasMountain = 0;
   
   % skip all non-valleys (mountains)
@@ -47,7 +49,7 @@ while(i < number_of_bins)
   leftValleyIdx = i;
   % printf("Left valley found: %d\n", i);
   % beginning there, find the next valley
-  for j = (leftValleyIdx+1):number_of_bins
+  for j = (leftValleyIdx+1):padded_number_of_bins
     if (maximas(j) != 0)
       % printf("Mountain found: %d\n", j);
       hasMountain = j;
@@ -100,8 +102,8 @@ while(i < number_of_bins)
     endif;
     
     rightValleyIdx = rightValleyIdx - 1;
-    if (rightValleyIdx >= 128)
-      rightValleyIdx = 128;
+    if (rightValleyIdx >= number_of_bins)
+      rightValleyIdx = number_of_bins;
     endif;
     
     good_mountains = [good_mountains ; f leftValleyIdx rightValleyIdx];

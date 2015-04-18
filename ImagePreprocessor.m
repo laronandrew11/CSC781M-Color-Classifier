@@ -21,7 +21,7 @@ img = zeros(120,120);
 imgm = ones(120,120);
 
 %		Specify the number of bins in the histogram
-number_of_bins = 128;
+number_of_bins = 50;
 
 % 		Perform recursive classification"
 %		  -> LAB to PCA
