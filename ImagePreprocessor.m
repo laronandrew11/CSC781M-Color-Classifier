@@ -1,12 +1,11 @@
+pkg load image;
 pkg load signal;
 close all;
 
 % (1) Read and display the image
-I = imread('sample1.png');
+I = imread('sample.png');
 % imshow(I);
 % title("Original sample image");
-
-
 
 % (2) Convert to CIELab colorspace
 LAB = RGB2Lab(I);
@@ -25,10 +24,18 @@ imgm = ones(120,120);
 
 number_of_bins = 128;
 
-[b, c] = classifyImageRegions(img, imgm, LAB,0);
+% [b, c] = classifyImageRegions(img, imgm, LAB,0);
+ [b, c] = try2classify(LAB, img, imgm, number_of_bins, 0);
 
 img = b;
 imgm = c;
 
-showImageMatrix(img);
+m = max(max(img));
 
+if (m == 0)
+  img = img ./ m;
+endif
+
+imshow(mat2gray(img));
+title(strcat("You win!"));
+% plot(img);
